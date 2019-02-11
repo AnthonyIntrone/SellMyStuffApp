@@ -1,5 +1,5 @@
 #title {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Impact', sans-serif;
     color: #02c93a;
 }
 
@@ -39,6 +39,14 @@
     border-color: #02c93a;
     /* padding: 10px; */
     margin-left: 16px;
+}
+
+#staticUser, #staticBalance {
+    background-color: #fff;
+    color: #02c93a;
+    border-color: #02c93a;
+    width: 50px;
+    padding: 5px;
 }
 
 #user {
