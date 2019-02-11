@@ -36,7 +36,7 @@
 <body style="background-color:#02c93a">
 
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar">
+    <nav class="navbar navbar-expand-lg navbar w-100">
 
         <ul class="nav navbar-nav">
             <li class="nav-item">
@@ -46,16 +46,19 @@
             </li>
         </ul>
 
-        <div class="col">
+        <div class="form-inline ml-auto">
+
             <span class="align=middle">Logged in as: </span>
             <span class="align=middle" id="staticUser"></span>
-        </div>
-        <div class="col">
             <span class="align=middle">Current balance: </span>
             <span class="align=middle" id="staticBalance"></span>
         </div>
 
-        <div class="form-inline ml-auto">
+    </nav>
+
+    <nav class="navbar navbar-expand-lg navbar w-100">
+
+        <div class="form-inline mx-auto">
 
             <div class="input-group">
                 <div class="input-group-prepend">
@@ -68,7 +71,7 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text" id="inputGroup-sizing-default">Item Cost</span>
                 </div>
-                <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" id="cost">
+                <input type="number" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" id="cost">
             </div>
         </div>
 
@@ -85,10 +88,10 @@
     <table class="table">
         <thead>
             <tr>
-                <th scope="col">User</th>
-                <th scope="col">Item</th>
-                <th scope="col">Cost</th>
-                <th scope="col">Status</th>
+                <th scope="col" class="text-center">User</th>
+                <th scope="col" class="text-center">Item</th>
+                <th scope="col" class="text-center">Cost</th>
+                <th scope="col" class="text-center">Status</th>
             </tr>
         </thead>
     </table>
@@ -97,32 +100,37 @@
 
     <script>
 
+        var user = '';
+        var bal = '';
+        var item_id = 0;
+
         function list() {
 
-            //grab code inside textarea
-            var code = document.getElementById('code').value;
+            // Send JSON of thing to server
+            // Store thing in DB
+            // Query DB for all stuff
+            // Send back to client
+            // Make a table with all the stuff
+            // Display table
 
-            if (lang == '') {
-                alert("Please select Language");
+            var req = new XMLHttpRequest();
+            req.open('POST', '/addStuff', true);
+            req.setRequestHeader("Content-type", "application/json");
+
+            var item_name =  document.getElementById('item').value;
+            var item_cost = document.getElementById('cost').value;
+
+            var stuffJSON = {user_id: user, item_id: item_id, item_name: item_name, item_cost: item_cost, item_status: "Available"};
+            console.log(stuffJSON);
+            stuffJSON = JSON.stringify(stuffJSON);
+
+            req.send(stuffJSON);
+            item_id = item_id + 1;
+
+            req.onload = function () {
+
             }
-            else if (code == '') {
-                alert("Please input your Code")
-            }
-            else {
-                var jsonToSend = { "language": lang, "code": code };
 
-                var req = new XMLHttpRequest();
-                req.open('POST', '/compAndRun', true);
-                req.setRequestHeader("Content-type", "application/json");
-
-                jsonToSend = JSON.stringify(jsonToSend);
-
-                req.send(jsonToSend);
-                req.onload = function () {
-                    var response = JSON.parse(req.responseText);
-                    document.getElementById('out').value = response.output;
-                }
-            }
         }
 
         function getLogin() {
@@ -137,7 +145,9 @@
                 var response = JSON.parse(req.responseText);
                 console.log(response);
                 var username = response.username;
+                user = username;
                 var balance = response.balance;
+                bal = balance;
                 document.getElementById('staticUser').innerHTML = username;
                 document.getElementById('staticBalance').innerHTML = balance;
             }

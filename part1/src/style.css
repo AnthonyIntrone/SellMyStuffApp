@@ -33,6 +33,14 @@
     color: #02c93a !important;
 }
 
+th {
+    color: #fff;
+}
+
+.table td {
+   text-align: center;
+}
+
 #inputGroup-sizing-default{
     background-color: #02c93a;
     color: #fff;

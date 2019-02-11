@@ -17,7 +17,7 @@ mongoose.connect("mongodb://localhost:27017/sellMyStuff", { useNewUrlParser: tru
 var currLoggedIn = '';
 
 var stuffSchema = new mongoose.Schema({
-    user_id: Number,
+    user_id: String,
     item_id: Number,
     item_name: String,
     item_cost: Number,
