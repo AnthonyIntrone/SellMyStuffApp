@@ -41,6 +41,10 @@ th {
    text-align: center;
 }
 
+#balance {
+    margin-left: 3px;
+}
+
 #inputGroup-sizing-default{
     background-color: #02c93a;
     color: #fff;

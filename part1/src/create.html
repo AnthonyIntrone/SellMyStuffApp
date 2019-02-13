@@ -68,8 +68,11 @@
                  </div>
 
                 <div class="row text-center">
-                    <div class="col-12">
+                    <div class="col-6">
                         <button type="number" onclick="create()" class="btn" id="button">Create Account</button>
+                    </div>
+                    <div class="col-6 align-self-center">
+                        <a href="login.html" id="link">Back to login</a>
                     </div>
                 </div>
 
@@ -125,6 +128,7 @@
                     var response = JSON.parse(req.responseText);
                     console.log(response);
                 }
+                alert('Account created!');
                 window.location.href = "login.html";
             }
         }
