@@ -47,7 +47,7 @@ app.post("/addStuff", (req, res) => {
 });
 
 app.post("/getStuff", (req, res) => {
-    stuff.findOne({time: req.body.item_id}, function (err, stuff) {
+    stuff.find({}).toArray(function (err, stuff) {
         if (stuff) {
             console.log(stuff);
             res.send(stuff);
