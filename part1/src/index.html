@@ -42,13 +42,19 @@
       </li>
     </ul>
 
-    <div class="form-inline ml-auto">
-
-      <span class="align=middle">Logged in as: </span>
-      <span class="align=middle" id="staticUser"></span>
-      <span class="align=middle">Current balance: </span>
-      <span class="align=middle" id="staticBalance"></span>
-    </div>
+        <div class="form-inline ml-auto">
+            <div id="logged">
+                <span class="align=middle">Logged in as: </span>
+                <span class="align=middle" id="staticUser"></span>
+            </div>
+            <div id="balance">
+                <span class="align=middle">Current balance: </span>
+                <span class="align=middle" id="staticBalance"></span>
+            </div>
+            <button type="button" onclick="logOut()" class="btn list" data-value="NONE">Log out
+                <i class="material-icons" id='list'>send</i>
+            </button>
+        </div>
 
   </nav>
 
@@ -144,6 +150,14 @@
           }
         }
       }
+
+      function logOut() {
+          window.location.href = "login.html";
+      }
+
+      window.onload = function() {
+          getLogin();
+      };
 
       var table = document.createElement("table");
       var tableRow = table.insertRow(-1);

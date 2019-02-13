@@ -4,7 +4,7 @@ var express = require('express'),
 
 var port = 8080;
 
-app.use(express.static(__dirname));
+app.use(express.static(__dirname, { index: 'login.html' }));
 
 var bodyParser = require('body-parser');
 app.use(bodyParser.json());

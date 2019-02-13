@@ -9,7 +9,7 @@
 }
 
 #login {
-    width: 50%;
+    /* width: 50%; */
 }
 
 body {
@@ -38,6 +38,13 @@ html {
 
 .input-group {
     margin: 3px;
+}
+
+.row {
+    padding-left: 25% !important;
+    padding-right: 25% !important;
+    padding-top: 10% !important;
+    padding-bottom: 10% !important;
 }
 
 #link {
