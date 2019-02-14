@@ -37,7 +37,7 @@ th {
     color: #fff;
 }
 
-.table td {
+table, td {
    text-align: center;
 }
 
@@ -94,4 +94,9 @@ th {
     padding-left: 10px;
     padding-bottom: 2px;
 
+}
+
+#dataTable{
+  text-align: center;
+  border-collapse: collapse;
 }

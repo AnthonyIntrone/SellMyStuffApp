@@ -129,8 +129,15 @@
 
       req.onload = function() {
       }
-
     }
+
+    function logOut() {
+        window.location.href = "login.html";
+    }
+
+    window.onload = function() {
+        getLogin();
+    };
 
     function getStuff() {
       req.open('POST', '/getStuff', true);
@@ -142,25 +149,19 @@
 
     function drawTable(itemList) {
 
+      //Making the headers of the table
       var headers = [];
       for (var i = 0; i < itemList.length; i++) {
-        for (var columnHeader in itemList[i]) {
-          if (headers.indexOf(columnHeader) === -1) {
-            headers.push(columnHeader);
+        for (var headerKey in itemList[i]) {
+          if (headers.indexOf(headerKey) === -1) {
+            headers.push(headerKey);
           }
         }
       }
 
-      function logOut() {
-          window.location.href = "login.html";
-      }
-
-      window.onload = function() {
-          getLogin();
-      };
-
       var table = document.createElement("table");
       var tableRow = table.insertRow(-1);
+
 
       for(var i = 0; i < headers.length; i++) {
         var tableHeader = document.createElement("th");
@@ -168,6 +169,7 @@
         tableRow.appendChild(tableHeader);
       }
 
+      //Creating the rows of the table
       for (var i = 0; i < itemList.length; i++) {
         tableRow = table.insertRow(-1);
 
@@ -177,7 +179,7 @@
         }
       }
 
-      var itemTable = document.getElementById("dataTable");
+      var itemTable = document.getElementById('dataTable');
       itemTable.innerHTML = "";
       itemTable.appendChild(table);
     }
