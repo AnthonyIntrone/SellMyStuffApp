@@ -156,21 +156,9 @@
 
     function drawTable(itemList) {
 
-      //Making the headers of the table
-      var headers = [];
-      headers.push("Item ID");
-      headers.push("Seller");
-      headers.push("Item");
-      headers.push("Cost");
-      headers.push("Status");
-      // for (var i = 0; i < itemList.length; i++) {
-      //   for (var headerKey in itemList[i]) {
-      //     if (headers.indexOf(headerKey) === -1) {
-      //       console.log(headerKey);
-      //       headers.push(headerKey);
-      //     }
-      //   }
-      // }
+      //Making the headers for table along with what field they map too from mongo
+      var headers = ["Purchase", "Item ID", "Seller", "Item", "Cost", "Status"];
+      var rowHeaders = ["_id", "user_id", "item_name", "item_cost", "item_status"];
 
       var table = document.createElement("table");
       var tableRow = table.insertRow(-1);
@@ -183,14 +171,17 @@
 
       //Creating the rows of the table
       for (var i = 0; i < itemList.length; i++) {
-        // if (i != 2 || i != 6) {
             tableRow = table.insertRow(-1);
 
-            for (var k = 0; k < headers.length; k++) {
+            var checkbox = document.createElement("INPUT");
+            checkbox.type = "checkbox";
+            checkbox.setAttribute("id", itemList[i][rowHeaders[0]]);
+            tableRow.appendChild(checkbox);
+
+            for (var k = 0; k < rowHeaders.length; k++) {
                 var tableCell = tableRow.insertCell(-1);
-                tableCell.innerHTML = itemList[i][headers[k]];
+                tableCell.innerHTML = itemList[i][rowHeaders[k]];
             }
-        // }
       }
 
       var itemTable = document.getElementById('dataTable');
