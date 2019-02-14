@@ -100,35 +100,36 @@
 
     function list() {
 
-      // Send JSON of thing to server
-      // Store thing in DB
-      // Query DB for all stuff
-      // Send back to client
-      // Make a table with all the stuff
-      // Display table
+        // Send JSON of thing to server
+        // Store thing in DB
+        // Query DB for all stuff
+        // Send back to client
+        // Make a table with all the stuff
+        // Display table
 
-      var req = new XMLHttpRequest();
-      req.open('POST', '/addStuff', true);
-      req.setRequestHeader("Content-type", "application/json");
+        var req = new XMLHttpRequest();
+        req.open('POST', '/addStuff', true);
+        req.setRequestHeader("Content-type", "application/json");
 
-      var item_name = document.getElementById('item').value;
-      var item_cost = document.getElementById('cost').value;
+        var item_name = document.getElementById('item').value;
+        var item_cost = document.getElementById('cost').value;
 
-      var stuffJSON = {
+        var stuffJSON = {
         user_id: user,
         item_id: item_id,
         item_name: item_name,
         item_cost: item_cost,
         item_status: "Available"
-      };
-      console.log(stuffJSON);
-      stuffJSON = JSON.stringify(stuffJSON);
+        };
+        console.log(stuffJSON);
+        stuffJSON = JSON.stringify(stuffJSON);
 
-      req.send(stuffJSON);
-      item_id = item_id + 1;
+        req.send(stuffJSON);
+        item_id = item_id + 1;
 
-      req.onload = function() {
-      }
+        req.onload = function() {
+            getStuff();
+        }
     }
 
     function logOut() {
@@ -140,28 +141,39 @@
     };
 
     function getStuff() {
-      req.open('POST', '/getStuff', true);
+        var req = new XMLHttpRequest();
+        req.open('POST', '/getStuff', true);
+        req.setRequestHeader("Content-type", "application/json");
+        req.send()
 
-      req.onload = function() {
-        drawTable(JSON.parse(req.responseText));
-      }
+        req.onload = function() {
+            console.log("In getStuff():");
+            var allStuff = JSON.parse(req.responseText);
+            console.log(allStuff);
+            drawTable(allStuff);
+        }
     }
 
     function drawTable(itemList) {
 
       //Making the headers of the table
       var headers = [];
-      for (var i = 0; i < itemList.length; i++) {
-        for (var headerKey in itemList[i]) {
-          if (headers.indexOf(headerKey) === -1) {
-            headers.push(headerKey);
-          }
-        }
-      }
+      headers.push("Item ID");
+      headers.push("Seller");
+      headers.push("Item");
+      headers.push("Cost");
+      headers.push("Status");
+      // for (var i = 0; i < itemList.length; i++) {
+      //   for (var headerKey in itemList[i]) {
+      //     if (headers.indexOf(headerKey) === -1) {
+      //       console.log(headerKey);
+      //       headers.push(headerKey);
+      //     }
+      //   }
+      // }
 
       var table = document.createElement("table");
       var tableRow = table.insertRow(-1);
-
 
       for(var i = 0; i < headers.length; i++) {
         var tableHeader = document.createElement("th");
@@ -171,12 +183,14 @@
 
       //Creating the rows of the table
       for (var i = 0; i < itemList.length; i++) {
-        tableRow = table.insertRow(-1);
+        // if (i != 2 || i != 6) {
+            tableRow = table.insertRow(-1);
 
-        for (var k = 0; k < headers.length; k++) {
-            var tableCell = tableRow.insertCell(-1);
-            tableCell.innerHTML = itemList[i][headers[j]];
-        }
+            for (var k = 0; k < headers.length; k++) {
+                var tableCell = tableRow.insertCell(-1);
+                tableCell.innerHTML = itemList[i][headers[k]];
+            }
+        // }
       }
 
       var itemTable = document.getElementById('dataTable');
@@ -201,6 +215,7 @@
         bal = balance;
         document.getElementById('staticUser').innerHTML = username;
         document.getElementById('staticBalance').innerHTML = balance;
+        getStuff();
       }
     }
 

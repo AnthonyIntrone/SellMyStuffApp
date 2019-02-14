@@ -47,8 +47,9 @@ app.post("/addStuff", (req, res) => {
 });
 
 app.post("/getStuff", (req, res) => {
-    stuff.find({}).toArray(function (err, stuff) {
+    stuff.find({}, function (err, stuff) {
         if (stuff) {
+            console.log("Printing stuff:");
             console.log(stuff);
             res.send(stuff);
         }
