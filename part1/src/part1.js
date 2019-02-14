@@ -103,6 +103,23 @@ app.post("/createUser", (req, res) => {
     });
 });
 
+app.post("/removeListings", (req, res) => {
+    var listings_to_remove = req.body;
+    console.log(listings_to_remove);
+
+    for (var i=0; i < listings_to_remove.length; i++) {
+        var id = listings_to_remove[i];
+        stuff.remove({_id: id}, function(err) {
+            if (err) {
+                console.log("Deletion failed");
+            }
+        });
+    }
+
+    res.send("Success!");
+
+});
+
 app.listen(port, () => {
     console.log("Server listening on port " + port);
 });

@@ -28,6 +28,16 @@
     background-color: #02c93a !important;
 }
 
+.remove {
+    color: #fff;
+    background-color: #02c93a !important;
+}
+
+.purchase {
+    color: #fff;
+    background-color: #02c93a !important;
+}
+
 .list:hover {
     background-color: #8effae !important;
     color: #02c93a !important;
@@ -43,6 +53,14 @@ table, td {
 
 #balance {
     margin-left: 3px;
+}
+
+#dataTable {
+    /* color: white; */
+}
+
+#tableDIV {
+    width: 100%;
 }
 
 #inputGroup-sizing-default{
