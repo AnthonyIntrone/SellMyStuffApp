@@ -26,9 +26,21 @@ contract sellMyStuff {
         balances[user] = current_amount + amount;
     }
     
+    function getAccountBalance() public returns (uint) {
+        return (balances[user]);
+    }    
+
+    function buyItem() {
+        
+    }
     
-
-
-
+    function sellItem() {
+        
+    }
+    
+    function transfer() {
+        
+    }
 
 }
+
