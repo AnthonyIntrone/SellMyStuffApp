@@ -30,17 +30,20 @@ contract sellMyStuff {
         return (balances[user]);
     }    
 
-    function buyItem() {
-        
-    }
+    // function buyItem(address item) public {
+    //     uint item_cost = item;
+    //     transfer(item_cost, user);
+    // }
     
-    function sellItem() {
+    // function sellItem(address item) public {
         
-    }
+    // }
     
-    function transfer() {
-        
-    }
+    // function transfer(uint amount, address recipient) public {
+    //     uint current_amount = balances[recipient];
+    //     balances[recipient] = current_amount - amount;
+    // }
 
 }
+
 
