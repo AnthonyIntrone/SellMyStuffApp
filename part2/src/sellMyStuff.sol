@@ -26,24 +26,13 @@ contract sellMyStuff {
         balances[user] = current_amount + amount;
     }
     
-    function getAccountBalance() public returns (uint) {
-        return (balances[user]);
+    function getAccountBalance() public view returns (uint) {
+        return balances[user];
     }    
-
-    // function buyItem(address item) public {
-    //     uint item_cost = item;
-    //     transfer(item_cost, user);
-    // }
     
-    // function sellItem(address item) public {
-        
-    // }
-    
-    // function transfer(uint amount, address recipient) public {
-    //     uint current_amount = balances[recipient];
-    //     balances[recipient] = current_amount - amount;
-    // }
-
+    function transaction(uint item, uint cost, address recipient, address seller) public {
+        assert(balances[recipient] > cost);
+        balances[recipient] =  balances[recipient] - cost;
+        balances[seller] = balances[seller] + cost;
+    }
 }
-
-
