@@ -10,7 +10,7 @@ contract sellMyStuff {
     modifier onlyAdmin {
         require(
             msg.sender == admin,
-            "Only the admin can call this function."
+            "Only admin can call this function."
         );
         _;
     }
@@ -25,11 +25,11 @@ contract sellMyStuff {
     
     /*** Functions ***/
     
-    function addUser(address user) private onlyAdmin {
+    function addUser(address user) public {
         balances[user] = 0;
     }
     
-    function removeUser(address user) private onlyAdmin {
+    function removeUser(address user) public {
         delete balances[user];
     }
     
@@ -39,8 +39,9 @@ contract sellMyStuff {
     }
     
     function withdraw(int amount, address user) public {
+        assert(balances[user] >= amount);
         int current_amount = balances[user];
-        balances[user] = current_amount + amount;
+        balances[user] = current_amount - amount;
     }
     
     function checkBalance(address user) public view returns (int) {

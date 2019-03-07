@@ -18,6 +18,14 @@ A completely decentralized marketplace running on the Ethereum blockchain.
 
 Our smart contract can be viewed under `part2/src/sellMyStuff.sol`
 
+## Part 3 (TODO: clean this up)
+
+1. Start Ganache on `127.0.0.1:7545` (Ganache should shart at this network address by default). This starts up the local Ganace chain.
+2. Open a truffle console by envoking `sudo truffle console --network development` from the `part3/` directory. This opens a truffle console with a connection to the Ganache chain.
+3. Execute `compile` in the truffle console.
+4. Execute `migrate` in the truffle console. This deploys the `sellMyStuff.sol` smart contract on the Ganace chain.
+* If you see this error when migrating: `Error: Returned values aren't valid, did it run Out of Gas?`, navigate to the `part3/build/contracts` directory and remove the `.json` files in there ('sudo rm *'). Re-compile and migrate afterwards.
+
 ## Authors
 
 * **TJ Chase**
