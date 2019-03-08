@@ -28,5 +28,5 @@ Our smart contract can be viewed under `part2/src/sellMyStuff.sol`
 
 ## Authors
 
-* **TJ Chase**
+* **Timothy Chase**
 * **Anthony Introne**
