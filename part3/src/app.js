@@ -13,6 +13,10 @@ const abi = [
 			{
 				"name": "user",
 				"type": "address"
+			},
+			{
+				"name": "initialDeposit",
+				"type": "int256"
 			}
 		],
 		"name": "addUser",
@@ -135,13 +139,13 @@ var sellMyStuffContract = web3.eth.Contract(abi, address);
  * 2.) Wait for it to complete, then call checkBalance
  * 3.) Wait for that to complete, then print out the new balance after deposit. 
  * NOTE: use .send() for functions that modify state (setters), and .call() for getters */
-sellMyStuffContract.methods.deposit(100, '0x919940fFAd2Ca64089A1dA818AEbd5542dE0eE13').send(
-    {from: '0x0314dC41EbbEdE2e2C15565B41767d81158355a9'}).then(function(r, e) {
-    console.log(r);
-    sellMyStuffContract.methods.checkBalance('0x919940fFAd2Ca64089A1dA818AEbd5542dE0eE13').call().then(function(r, e) {
-        console.log("Balance is now " + r);
-    });
-});
+// sellMyStuffContract.methods.deposit(100, '0x919940fFAd2Ca64089A1dA818AEbd5542dE0eE13').send(
+//     {from: '0x0314dC41EbbEdE2e2C15565B41767d81158355a9'}).then(function(r, e) {
+//     console.log(r);
+//     sellMyStuffContract.methods.checkBalance('0x919940fFAd2Ca64089A1dA818AEbd5542dE0eE13').call().then(function(r, e) {
+//         console.log("Balance is now " + r);
+//     });
+// });
 
 app.use(express.static(__dirname, { index: 'login.html' }));
 
@@ -166,12 +170,14 @@ var stuffSchema = new mongoose.Schema({
 var loginSchema = new mongoose.Schema({
     username: String,
     password: String,
+    address: String,
     balance: Number
 });
 
 var stuff = mongoose.model("stuff", stuffSchema);
 var login = mongoose.model("login", loginSchema);
 
+// [DATABASE] Adds things to the database
 app.post("/addStuff", (req, res) => {
     var data = new stuff(req.body);
     data.save()
@@ -185,6 +191,7 @@ app.post("/addStuff", (req, res) => {
     });
 });
 
+// [DATABASE] Gets things from the database
 app.post("/getStuff", (req, res) => {
     stuff.find({}, function (err, stuff) {
         if (stuff) {
@@ -195,6 +202,7 @@ app.post("/getStuff", (req, res) => {
     });
 });
 
+// [HELPER] Gets currently logged in user
 app.post("/getUser", (req, res) => {
     login.findOne({username: currLoggedIn}, function (err, user) {
         if (user) {
@@ -208,6 +216,7 @@ app.post("/getUser", (req, res) => {
     });
 });
 
+// [DATABASE] Verifies username/password from records stored in database
 app.post("/login", (req, res) => {
     login.findOne({username: req.body.username}, function (err, user) {
         if (user) {
@@ -228,20 +237,79 @@ app.post("/login", (req, res) => {
     });
 });
 
+// TODO: Need to keep mapping of addresses available to registered users
+// ^ maybe copy all Ganache created addresses to array in here, when user registers, give them the next avail address
+// Keep track of avail addresses
+
+var admin = '0x919940fFAd2Ca64089A1dA818AEbd5542dE0eE13';
+var avail_addresses = ['0x0314dC41EbbEdE2e2C15565B41767d81158355a9',
+                       '0x16996aB5731AF1C1aBBEfaE3dDcb7788eBaa0493',
+                       '0x028978514B0DADb45ED2bfe50F6F13d446744B45',
+                       '0x6237c2daA44cd0CF154779f2e72B865371c2cc8f',
+                       '0x43F625D4bfF85Ce5BB324F0283e625363dBBA8d3',
+                       '0x8FC472a1f46522a39Ce33FE2CE5Eb50Fd5b5ea61',
+                       '0x6514D51692AE2B6Df9BD3828AfCbbf8cAa6E28Df',
+                       '0xF8e66cD341cF28E1Dc786167Ab67d5ecB4a49BD1',
+                       '0x961E935FFB66A589EF8602838cc5AD4DE8E06647'];
+
+var taken_addresses = [];
+
+function getNextAvailAddress(user) {
+    for (var addr in avail_addresses) {
+        if (! taken_addresses.includes(avail_addresses[addr])) {
+            taken_addresses.push(avail_addresses[addr]);
+            return avail_addresses[addr]
+        }
+    }
+    return ""
+}
+
+ // [DATABASE] Adds username/password combo to database
+ // [CONTRACT] Maps address (user) with their initial deposit (balance) => addUser(user, deposit)
+
+ // When creating user, need to find address from above thats not in use
+// 1.) Loop through avail_addresses
+// 2.) If current addr exists in database (login.findOne returns found),
+//     move on. If not, return current addr
+// 3.) Assign address to user (in DB and contract)
+
 app.post("/createUser", (req, res) => {
-    console.log(req.body);
-    var data = new login(req.body);
-    data.save()
-    .then(item => {
-        res.send("User created and saved to database");
-        console.log("Saved user to database");
-        console.log(data);
-    })
-    .catch(err => {
-        res.status(400).send("unable to save to database");
-    });
+
+    for (var i in avail_addresses) {
+
+        login.findOne({address: avail_addresses[i]}, function (err, found) {
+            if (!found) {
+                var loginData = { username: req.body.username,
+                                  password: req.body.password,
+                                  address: avail_addresses[i],
+                                  balance: req.body.balance }
+
+                console.log(req.body.username + " assigned address: " + loginData.address);
+
+                var data = new login(loginData);
+                console.log(data);
+                data.save() 
+                .then(item => {
+                    res.send("User created and saved to database");
+                    console.log("Saved user to database");
+                    console.log(data);
+
+                    // Instantiates given address to balance in contracts state
+                    sellMyStuffContract.methods.deposit(loginData.balance, loginData.address).send(
+                        {from: admin}).then(function(r, e) {
+                        console.log(r);
+                    });
+
+                })
+                .catch(err => {
+                    res.status(400).send("unable to save to database and create user on smart contract");
+                });
+            }
+        });
+    }
 });
 
+// [DATABASE] Removes currently listed item(s)
 app.post("/removeListings", (req, res) => {
     var listings_to_remove = req.body;
     console.log(listings_to_remove);
