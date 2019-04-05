@@ -6,6 +6,7 @@ contract sellMyStuff {
     
     address private admin;
     mapping (address => int) private balances;
+    mapping (address => bool) private registered;
     
     modifier onlyAdmin {
         require(
@@ -25,11 +26,13 @@ contract sellMyStuff {
     
     /*** Functions ***/
     
-    function addUser(address user) public {
-        balances[user] = 0;
+    function addUser(address user, int balance) public {
+        balances[user] = balance;
+        registered[user] = true;
     }
     
-    function removeUser(address user) public {
+    function removeUser(address user) private onlyAdmin {
+        registered[user] = false;
         delete balances[user];
     }
     
@@ -49,6 +52,8 @@ contract sellMyStuff {
     }    
     
     function transaction(int cost, address recipient, address seller) public {
+        assert(registered[seller]);
+        assert(registered[recipient]);
         assert(balances[recipient] > cost);
         balances[recipient] = balances[recipient] - cost;
         balances[seller] = balances[seller] + cost;
